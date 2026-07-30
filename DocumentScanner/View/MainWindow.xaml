@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="DocumentScanner.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:DocumentScanner"
+    xmlns:view="using:DocumentScanner.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dg="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:converter="using:CommunityToolkit.WinUI.Converters"
+    mc:Ignorable="d"
+    Title="DocumentScanner">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid Background="White" Name="WindowGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="1" Background="LightCyan">
+            <ScrollViewer ZoomMode="Enabled" MaxZoomFactor="{Binding ZoomFactor}" Margin="10,10,10,40" Grid.Row="2" BorderThickness="1" CornerRadius="10">
+                <ItemsControl ItemsSource="{Binding Pages}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <view:Page/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+        </Grid>
+
+        <RelativePanel Background="#5B6770">
+            <TextBlock Text="{Binding AllPage}" Name="AllPage" Foreground="White" FontSize="16" Margin="20,0,0,0" RelativePanel.AlignVerticalCenterWithPanel="True"/>
+            <TextBlock Text="{Binding SelectedPages}" Foreground="White"  FontSize="16" Margin="100,0,0,0" RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.RightOf="AllPage"/>
+        </RelativePanel>
+
+        <CommandBar Grid.Row="1" Background="#D9DEE3" CornerRadius="10" HorizontalAlignment="Center" VerticalAlignment="Bottom" DefaultLabelPosition="Right"  Margin="0,0,0,30">
+            <AppBarButton Icon="OpenFile" Command="{Binding OpenFile_Click}" Label="Open file"/>
+            <AppBarButton Icon="Delete" Command="{Binding CloseFile_Click}" Label="Close file"/>
+            <AppBarSeparator/>
+            <AppBarButton Icon="Scan" Label="Scan" Command="{Binding Scanfile_Click}"/>
+            <AppBarToggleButton Icon="SelectAll" IsChecked="{Binding SelectPageISChecked, Mode=TwoWay}" Label="Select page" Command="{Binding SelectPages_Click}"/>
+            <!--<AppBarButton Icon="SelectAll" Label="Képmetsző"/>-->
+            <!--<AppBarButton Icon="Clear" Label="Clear text" Command="{Binding ClearOCRResponse_Click}"/>-->
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Icon="Clear" Label="Clear text" Command="{Binding ClearOCRResponse_Click}"/>
+                <AppBarButton Icon="Clear" Label="Clear Selection" Command="{Binding ClearSelection_Click}"/>
+            </CommandBar.SecondaryCommands>
+
+            <CommandBar.Content>
+                <TextBlock MaxWidth="250" Text="{Binding FileName}" Margin="12,15"/>
+            </CommandBar.Content>
+        </CommandBar>
+
+        <RelativePanel Grid.RowSpan="2" Grid.Column="1">
+            <TextBlock Text="OCR results" FontWeight="Bold" Margin="20,10,20,0" FontSize="18" Name="ocrTitle" />
+            <ScrollViewer Grid.RowSpan="2" Grid.Column="1" Margin="20" RelativePanel.Below="ocrTitle">
+                <StackPanel>
+                    <TextBlock Text="{Binding OCRresult}" TextWrapping="Wrap" FontSize="16"/>
+                </StackPanel>
+            </ScrollViewer>
+        </RelativePanel>
+
+
+    </Grid>
+</Window>
